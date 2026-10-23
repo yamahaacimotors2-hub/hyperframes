@@ -46,3 +46,17 @@ The parallel set at `.agents/skills/` is a byte-identical copy so Codex
 CLI users get the same auto-discover behaviour — keep the two in sync
 when editing. A `scripts/check-skill-mirror.mjs` check enforces this at
 CI time.
+
+## Claude-powered editing stack
+
+The `edit-setup` skill installs and drives a five-tool editing loadout —
+HyperFrames (runtime), Whisper (`hyperframes transcribe`), CLAP (sound ID),
+Demucs (stem split) and Blender (3D) — for editing raw footage end to end:
+
+1. `bash .claude/skills/edit-setup/scripts/install.sh --prefetch`, then
+   `doctor.sh` until it reports 5/5.
+2. `pipeline.sh analyze <video>` → stems, word transcript, sound events and
+   `brief.md` in `edit-work/<name>/`.
+3. Invoke `/edit-setup`; the agent writes an `edl.json`, builds the
+   composition, and gates it with `pipeline.sh finish` (lint → check →
+   render → −14 LUFS).
