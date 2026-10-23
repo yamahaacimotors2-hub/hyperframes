@@ -118,5 +118,6 @@ Runs `hyperframes lint` → `hyperframes check` → `render` → loudness normal
 - **Captions drift late** → source was VFR; use `source.mp4` from the work dir.
 - **Transcript mishears over music** → you transcribed the mix, not `vocals.wav`.
 - **CLAP labels everything "music"** → narrow the label list to what's plausible in this footage, raise `--min-score`.
+- **Blender aborts on `libEGL` / "Build without OpenImageDenoiser"** → headless box without GPU; `--engine auto` (default) already picks Cycles on CPU there and only denoises when the build supports it.
 - **Blender render black** → object outside camera; the script normalizes to a 2-unit box, so check imported model scale/units.
 - **Model downloads fail** → HuggingFace / `dl.fbaipublicfiles.com` blocked on this network; run `install.sh --prefetch` where they're reachable.

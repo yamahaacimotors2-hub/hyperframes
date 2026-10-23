@@ -2,7 +2,7 @@
 
   blender -b -P blender_object.py -- --out assets/obj [--model thing.glb]
       [--primitive cube|sphere|torus|monkey] [--color "#D9653B"]
-      [--frames 90] [--fps 30] [--size 1080] [--engine EEVEE|CYCLES]
+      [--frames 90] [--fps 30] [--size 1080] [--engine auto|EEVEE|CYCLES]
 
 Writes <out>/####.png (RGBA). pipeline.sh then encodes them to a VP9-alpha
 .webm that a HyperFrames <video> clip can layer over footage — zero credits.
@@ -26,7 +26,7 @@ def parse() -> argparse.Namespace:
     ap.add_argument("--frames", type=int, default=90)
     ap.add_argument("--fps", type=int, default=30)
     ap.add_argument("--size", type=int, default=1080)
-    ap.add_argument("--engine", default="EEVEE")
+    ap.add_argument("--engine", default="auto")
     return ap.parse_args(argv)
 
 
@@ -108,9 +108,20 @@ def main() -> None:
             kp.interpolation = "LINEAR"
 
     r = scene.render
+    engine = a.engine.upper()
+    if engine == "AUTO":
+        # EEVEE needs a GPU/EGL context; headless Linux servers only have Cycles on CPU.
+        headless = sys.platform.startswith("linux") and not os.environ.get("DISPLAY")
+        engine = "CYCLES" if headless else "EEVEE"
     engines = {e.identifier for e in r.bl_rna.properties["engine"].enum_items}
-    want = "BLENDER_EEVEE_NEXT" if a.engine == "EEVEE" else "CYCLES"
-    r.engine = want if want in engines else ("BLENDER_EEVEE" if a.engine == "EEVEE" else "CYCLES")
+    if engine == "EEVEE":
+        r.engine = "BLENDER_EEVEE_NEXT" if "BLENDER_EEVEE_NEXT" in engines else "BLENDER_EEVEE"
+    else:
+        r.engine = "CYCLES"
+        scene.cycles.device = "CPU"
+        scene.cycles.samples = 64
+        # Distro builds often ship without OpenImageDenoise; denoise only when available.
+        scene.cycles.use_denoising = getattr(bpy.app.build_options, "openimagedenoise", False)
     r.resolution_x = r.resolution_y = a.size
     r.fps = a.fps
     r.film_transparent = True

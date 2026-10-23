@@ -54,7 +54,7 @@ three_d() {
   [ -n "$BLENDER" ] || { echo "Blender not installed (run install.sh)" >&2; exit 1; }
   step 05 "Blender — $name"
   local frames="assets/.render-$name"
-  "$BLENDER" -b -P "$HERE/blender_object.py" -- --out "$frames" "$@"
+  "$BLENDER" -b --python-exit-code 1 -P "$HERE/blender_object.py" -- --out "$frames" "$@"
   mkdir -p assets
   ffmpeg -v error -y -framerate 30 -i "$frames/%04d.png" -c:v libvpx-vp9 -pix_fmt yuva420p -b:v 0 -crf 30 -auto-alt-ref 0 "assets/$name.webm"
   echo "→ assets/$name.webm (transparent; layer it as a <video> clip)"
