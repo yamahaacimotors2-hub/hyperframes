@@ -29,6 +29,12 @@ DEFAULT_LABELS = [
 ]
 
 
+def embed(out) -> torch.Tensor:
+    # transformers 4.x returns the projected embedding; 5.x wraps it in pooler_output.
+    t = out if isinstance(out, torch.Tensor) else out.pooler_output
+    return torch.nn.functional.normalize(t, dim=-1)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("audio")
@@ -59,7 +65,7 @@ def main() -> int:
 
     with torch.no_grad():
         t = proc(text=prompts, return_tensors="pt", padding=True).to(device)
-        text_emb = torch.nn.functional.normalize(model.get_text_features(**t), dim=-1)
+        text_emb = embed(model.get_text_features(**t))
 
         hits = []
         for i in range(0, len(clips), 32):
@@ -68,7 +74,7 @@ def main() -> int:
                 a = proc(audio=batch, sampling_rate=SR, return_tensors="pt").to(device)
             except TypeError:  # transformers < 4.46 named it `audios`
                 a = proc(audios=batch, sampling_rate=SR, return_tensors="pt").to(device)
-            audio_emb = torch.nn.functional.normalize(model.get_audio_features(**a), dim=-1)
+            audio_emb = embed(model.get_audio_features(**a))
             probs = (audio_emb @ text_emb.T * model.logit_scale_a.exp()).softmax(-1).cpu().numpy()
             for j, p in enumerate(probs):
                 k = i + j
