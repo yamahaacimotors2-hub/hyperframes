@@ -1,0 +1,176 @@
+{
+  "slots": {
+    "engine_idle": {
+      "prompt": "a motorcycle engine idling",
+      "scores": [0.339, 0.313, 0.305, 0.331],
+      "picked": 0
+    },
+    "smg_whir": {
+      "prompt": "an electric motor whirring up",
+      "scores": [0.168, 0.184, 0.186, 0.182],
+      "picked": 2
+    },
+    "engine_rev": {
+      "prompt": "a motorcycle engine revving loudly",
+      "scores": [0.274, 0.289, 0.248, 0.29],
+      "picked": 3
+    },
+    "whoosh": {
+      "prompt": "a fast whoosh swoosh transition sound",
+      "scores": [0.183, 0.156, 0.189, 0.168],
+      "picked": 2
+    },
+    "impact": {
+      "prompt": "a deep cinematic boom impact",
+      "scores": [0.122, 0.135, 0.132, 0.107],
+      "picked": 1
+    },
+    "ui_blip": {
+      "prompt": "a digital interface notification chime",
+      "scores": [0.237, 0.255, 0.25, 0.268],
+      "picked": 3
+    },
+    "light_snap": {
+      "prompt": "an electric spark zap",
+      "scores": [0.058, 0.084, 0.017, 0.04],
+      "picked": 1
+    },
+    "riser": {
+      "prompt": "a rising tension riser sound effect",
+      "scores": [0.337, 0.338, 0.338, 0.34],
+      "picked": 3
+    },
+    "city": {
+      "prompt": "busy city traffic ambience with car horns",
+      "scores": [0.151, 0.174, 0.158, 0.166],
+      "picked": 1
+    }
+  },
+  "mix_events": [
+    {
+      "t": 0,
+      "label": "a man speaking",
+      "score": 0.13
+    },
+    {
+      "t": 1,
+      "label": "a man speaking",
+      "score": 0.11
+    },
+    {
+      "t": 2,
+      "label": "a man speaking",
+      "score": 0.148
+    },
+    {
+      "t": 3,
+      "label": "a man speaking",
+      "score": 0.089
+    },
+    {
+      "t": 4,
+      "label": "a man speaking",
+      "score": 0.097
+    },
+    {
+      "t": 5,
+      "label": "a fast whoosh transition",
+      "score": 0.134
+    },
+    {
+      "t": 6,
+      "label": "a motorcycle engine idling",
+      "score": 0.198
+    },
+    {
+      "t": 7,
+      "label": "a man speaking",
+      "score": 0.166
+    },
+    {
+      "t": 8,
+      "label": "a man speaking",
+      "score": 0.105
+    },
+    {
+      "t": 9,
+      "label": "a man speaking",
+      "score": 0.072
+    },
+    {
+      "t": 10,
+      "label": "electronic dance music with drums",
+      "score": 0.089
+    },
+    {
+      "t": 11,
+      "label": "electronic dance music with drums",
+      "score": 0.086
+    },
+    {
+      "t": 12,
+      "label": "a man speaking",
+      "score": 0.102
+    },
+    {
+      "t": 13,
+      "label": "a man speaking",
+      "score": 0.122
+    },
+    {
+      "t": 14,
+      "label": "a man speaking",
+      "score": 0.109
+    },
+    {
+      "t": 15,
+      "label": "a motorcycle engine idling",
+      "score": 0.149
+    },
+    {
+      "t": 16,
+      "label": "a deep cinematic boom impact",
+      "score": 0.219
+    },
+    {
+      "t": 17,
+      "label": "a man speaking",
+      "score": 0.099
+    },
+    {
+      "t": 18,
+      "label": "electronic dance music with drums",
+      "score": 0.158
+    },
+    {
+      "t": 19,
+      "label": "cinematic orchestral music",
+      "score": 0.159
+    },
+    {
+      "t": 20,
+      "label": "a man speaking",
+      "score": 0.227
+    },
+    {
+      "t": 21,
+      "label": "cinematic orchestral music",
+      "score": 0.311
+    },
+    {
+      "t": 22,
+      "label": "cinematic orchestral music",
+      "score": 0.311
+    },
+    {
+      "t": 23,
+      "label": "cinematic orchestral music",
+      "score": 0.259
+    },
+    {
+      "t": 24,
+      "label": "silence",
+      "score": 0.192
+    }
+  ]
+}

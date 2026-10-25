@@ -1,0 +1,235 @@
+{
+  "voice": "kokoro v1.0 bm_lewis",
+  "lines": [
+    {
+      "id": "vo1",
+      "text": "In a city that never goes quiet,",
+      "dur": 2.428,
+      "whisper": "in a city that never goes quiet.",
+      "match": true,
+      "words": [
+        {
+          "text": "in",
+          "start": 0.16,
+          "end": 0.32
+        },
+        {
+          "text": "a",
+          "start": 0.32,
+          "end": 0.48
+        },
+        {
+          "text": "city",
+          "start": 0.48,
+          "end": 0.8
+        },
+        {
+          "text": "that",
+          "start": 0.8,
+          "end": 1.12
+        },
+        {
+          "text": "never",
+          "start": 1.12,
+          "end": 1.36
+        },
+        {
+          "text": "goes",
+          "start": 1.36,
+          "end": 1.76
+        },
+        {
+          "text": "quiet.",
+          "start": 1.76,
+          "end": 2.428
+        }
+      ]
+    },
+    {
+      "id": "vo2",
+      "text": "it knows when to rest.",
+      "dur": 1.655,
+      "whisper": "It knows when to rest.",
+      "match": true,
+      "words": [
+        {
+          "text": "It",
+          "start": 0.0,
+          "end": 0.24
+        },
+        {
+          "text": "knows",
+          "start": 0.24,
+          "end": 0.64
+        },
+        {
+          "text": "when",
+          "start": 0.64,
+          "end": 0.88
+        },
+        {
+          "text": "to",
+          "start": 0.88,
+          "end": 1.12
+        },
+        {
+          "text": "rest.",
+          "start": 1.12,
+          "end": 1.655
+        }
+      ]
+    },
+    {
+      "id": "vo3",
+      "text": "Stop and Start. It sleeps at every red light.",
+      "dur": 3.075,
+      "whisper": "Stop and start. It sleeps at every red light.",
+      "match": true,
+      "words": [
+        {
+          "text": "Stop",
+          "start": 0.0,
+          "end": 0.48
+        },
+        {
+          "text": "and",
+          "start": 0.48,
+          "end": 0.64
+        },
+        {
+          "text": "start,",
+          "start": 0.64,
+          "end": 1.12
+        },
+        {
+          "text": "it",
+          "start": 1.12,
+          "end": 1.28
+        },
+        {
+          "text": "sleeps",
+          "start": 1.28,
+          "end": 1.76
+        },
+        {
+          "text": "at",
+          "start": 1.76,
+          "end": 1.92
+        },
+        {
+          "text": "every",
+          "start": 1.92,
+          "end": 2.24
+        },
+        {
+          "text": "red",
+          "start": 2.24,
+          "end": 2.56
+        },
+        {
+          "text": "light.",
+          "start": 2.56,
+          "end": 3.075
+        }
+      ]
+    },
+    {
+      "id": "vo4",
+      "text": "Smart Motor Generator. Silent push, the moment you go.",
+      "dur": 4.301,
+      "whisper": "Smart Motor Generator Silent Push The moment you go",
+      "match": true,
+      "words": [
+        {
+          "text": "Smart",
+          "start": 0.0,
+          "end": 0.48
+        },
+        {
+          "text": "Motor",
+          "start": 0.48,
+          "end": 0.88
+        },
+        {
+          "text": "Generator,",
+          "start": 0.88,
+          "end": 1.68
+        },
+        {
+          "text": "silent",
+          "start": 1.68,
+          "end": 2.16
+        },
+        {
+          "text": "push,",
+          "start": 2.16,
+          "end": 2.8
+        },
+        {
+          "text": "the",
+          "start": 2.8,
+          "end": 3.04
+        },
+        {
+          "text": "moment",
+          "start": 3.04,
+          "end": 3.6
+        },
+        {
+          "text": "you",
+          "start": 3.6,
+          "end": 3.76
+        },
+        {
+          "text": "go.",
+          "start": 3.76,
+          "end": 4.301
+        }
+      ]
+    },
+    {
+      "id": "vo5",
+      "text": "Hybrid. Built for the city you ride.",
+      "dur": 2.335,
+      "whisper": "hybrid built for the city you ride",
+      "match": true,
+      "words": [
+        {
+          "text": "Hybrid",
+          "start": 0.16,
+          "end": 0.72
+        },
+        {
+          "text": "built",
+          "start": 0.72,
+          "end": 0.96
+        },
+        {
+          "text": "for",
+          "start": 0.96,
+          "end": 1.12
+        },
+        {
+          "text": "the",
+          "start": 1.12,
+          "end": 1.28
+        },
+        {
+          "text": "city",
+          "start": 1.28,
+          "end": 1.6
+        },
+        {
+          "text": "you",
+          "start": 1.6,
+          "end": 1.84
+        },
+        {
+          "text": "ride.",
+          "start": 1.84,
+          "end": 2.335
+        }
+      ]
+    }
+  ]
+}

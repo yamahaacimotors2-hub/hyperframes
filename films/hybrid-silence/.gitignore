@@ -1,0 +1,9 @@
+# Regenerable from the scripts (bike.py → encode.sh, voice.py, sound.py)
+renders/
+audio/*.wav
+audio/sfx/
+audio/stems/
+audio/demucs-out/
+.hyperframes/
+__pycache__/
+!compositions/
