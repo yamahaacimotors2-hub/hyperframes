@@ -17,6 +17,15 @@
           src: url("../fonts/InterDisplay-Black.woff2") format("woff2");
           font-weight: 900;
         }
+        #endcard-scrim {
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 0;
+          height: 760px;
+          background: linear-gradient(to bottom, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.45) 60%, transparent);
+          opacity: 0;
+        }
         #endcard-root {
           position: absolute;
           inset: 0;
@@ -28,8 +37,8 @@
           position: absolute;
           left: 0;
           right: 0;
-          top: 250px;
-          font-size: 150px;
+          top: 120px;
+          font-size: 132px;
           font-weight: 900;
           letter-spacing: -4px;
           line-height: 0.95;
@@ -48,7 +57,7 @@
         #endcard-rule {
           position: absolute;
           left: 390px;
-          top: 590px;
+          top: 392px;
           width: 300px;
           height: 3px;
           background: linear-gradient(90deg, transparent, #36d8ff, transparent);
@@ -57,8 +66,8 @@
           position: absolute;
           left: 0;
           right: 0;
-          top: 630px;
-          font-size: 52px;
+          top: 418px;
+          font-size: 46px;
           font-weight: 500;
           letter-spacing: 0.5px;
           text-shadow: 0 4px 30px rgba(0, 0, 0, 0.9);
@@ -67,6 +76,7 @@
       </style>
 
       <div id="endcard-root" data-composition-id="endcard" data-width="1080" data-height="1920">
+        <div id="endcard-scrim"></div>
         <div id="endcard-title">
           <span class="endcard-row" id="endcard-row-1"></span>
           <span class="endcard-row" id="endcard-row-2"></span>
@@ -84,13 +94,14 @@
             [...text].forEach((c) => {
               const s = document.createElement("span");
               s.className = "endcard-ch";
-              s.textContent = c === " " ? " " : c;
+              s.textContent = c === " " ? "\u00a0" : c; // a bare space collapses inside inline-block
               row.appendChild(s);
             });
             return row.querySelectorAll(".endcard-ch");
           };
           const r1 = letters("endcard-row-1", "FZS FI");
           const r2 = letters("endcard-row-2", "HYBRID");
+          tl.fromTo("#endcard-scrim", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power2.out" }, 0);
           tl.fromTo(r1, { opacity: 0, y: 60, filter: "blur(12px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.5, stagger: 0.04, ease: "power3.out" }, 0.15);
           tl.fromTo(r2, { opacity: 0, y: 60, filter: "blur(12px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.55, stagger: 0.05, ease: "power3.out" }, 0.35);
           tl.fromTo("#endcard-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.7, ease: "power3.out" }, 0.8);

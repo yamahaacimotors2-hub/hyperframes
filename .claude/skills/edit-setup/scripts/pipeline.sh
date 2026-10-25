@@ -70,7 +70,7 @@ finish() {
   local raw="${out%.mp4}.raw.mp4"
   (cd "$dir" && $HF render --output "$raw")
   step 4/4 "Loudness → -14 LUFS / -1 dBTP (platform target)"
-  ffmpeg -v error -y -i "$raw" -c:v copy -af loudnorm=I=-14:TP=-1:LRA=11 -c:a aac -b:a 256k "$out"
+  ffmpeg -v error -y -i "$raw" -c:v copy -af loudnorm=I=-14:TP=-1:LRA=11 -ar 48000 -c:a aac -b:a 256k "$out"  # loudnorm upsamples to 192 kHz; platforms want 48 kHz
   rm -f "$raw"
   echo "→ $out"
 }
