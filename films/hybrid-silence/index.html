@@ -1,0 +1,433 @@
+<!doctype html>
+<html
+  lang="en"
+  data-composition-variables='[
+    {"id":"creator","type":"string","label":"Creator credit (end card)","default":"","placeholder":"@yourhandle"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Silence Is Power</title>
+    <script src="vendor/gsap.min.js"></script>
+    <script src="data.js"></script>
+    <style>
+      @font-face {
+        font-family: "HF Display";
+        src: url("fonts/InterDisplay-Medium.woff2") format("woff2");
+        font-weight: 500;
+      }
+      @font-face {
+        font-family: "HF Display";
+        src: url("fonts/InterDisplay-Bold.woff2") format("woff2");
+        font-weight: 700;
+      }
+      @font-face {
+        font-family: "HF Display";
+        src: url("fonts/InterDisplay-ExtraBold.woff2") format("woff2");
+        font-weight: 800;
+      }
+      @font-face {
+        font-family: "HF Display";
+        src: url("fonts/InterDisplay-Black.woff2") format("woff2");
+        font-weight: 900;
+      }
+      @font-face {
+        font-family: "HF Mono";
+        src: url("fonts/DejaVuSansMono.woff2") format("woff2");
+      }
+      :root {
+        --ink: #eef6ff;
+        --cyan: #36d8ff;
+        --mono: "HF Mono", monospace;
+        --display: "HF Display", sans-serif;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+        color: var(--ink);
+        font-family: var(--display);
+      }
+      /* oversized by 24px each side so camera shake never reveals an edge */
+      #stage {
+        position: absolute;
+        left: -24px;
+        top: -24px;
+        width: 1128px;
+        height: 1968px;
+      }
+      .scene {
+        position: absolute;
+        left: 24px;
+        top: 24px;
+        width: 1080px;
+        height: 1920px;
+      }
+      .shot {
+        position: absolute;
+        left: 24px;
+        top: 24px;
+        width: 1080px;
+        height: 1920px;
+        object-fit: cover;
+        filter: contrast(1.22) saturate(1.18) brightness(0.9);
+      }
+
+      /* ── captions ───────────────────────────────────── */
+      #captions {
+        position: absolute;
+        left: 24px;
+        top: 24px;
+        width: 1080px;
+        height: 1920px;
+      }
+      .phrase {
+        position: absolute;
+        left: 90px;
+        width: 900px;
+        text-align: center;
+        font-weight: 700;
+        letter-spacing: -1px;
+        line-height: 1.12;
+        opacity: 0;
+      }
+      .phrase.mid {
+        top: 1130px;
+        font-size: 78px;
+      }
+      .phrase.low {
+        top: 1390px;
+        font-size: 68px;
+        text-shadow: 0 4px 30px rgba(0, 0, 0, 0.85);
+      }
+      .w {
+        display: inline-block;
+        margin: 0 10px;
+        opacity: 0;
+      }
+      .w.e {
+        color: var(--cyan);
+        text-shadow:
+          0 0 24px rgba(54, 216, 255, 0.55),
+          0 4px 30px rgba(0, 0, 0, 0.85);
+      }
+
+      /* ── HUD chapter labels ─────────────────────────── */
+      .hud {
+        position: absolute;
+        left: 112px;
+        top: 174px;
+        width: 900px;
+        opacity: 0;
+      }
+      .hud .k {
+        font-family: var(--mono);
+        font-size: 28px;
+        letter-spacing: 8px;
+        color: var(--cyan);
+      }
+      .hud .t {
+        margin-top: 14px;
+        font-size: 50px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        text-shadow: 0 4px 30px rgba(0, 0, 0, 0.9);
+      }
+      .hud .s {
+        margin-top: 10px;
+        font-size: 30px;
+        font-weight: 500;
+        color: rgba(238, 246, 255, 0.78);
+        text-shadow: 0 4px 24px rgba(0, 0, 0, 0.9);
+      }
+      .hud .bar {
+        margin-top: 22px;
+        width: 220px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--cyan), transparent);
+        transform-origin: left;
+      }
+
+      /* ── launch ─────────────────────────────────────── */
+      #streaks {
+        overflow: hidden;
+      }
+      .streak {
+        position: absolute;
+        height: 3px;
+        border-radius: 2px;
+        background: linear-gradient(90deg, transparent, rgba(120, 220, 255, 0.95), transparent);
+      }
+      #go {
+        display: grid;
+        place-items: center;
+      }
+      #go-word {
+        display: block;
+        width: 1080px;
+        font-size: 420px;
+        font-weight: 900;
+        letter-spacing: -18px;
+        text-align: center;
+        line-height: 1;
+        color: #fff;
+        text-shadow:
+          -10px 0 0 rgba(255, 59, 59, 0.55),
+          10px 0 0 rgba(54, 216, 255, 0.6),
+          0 0 80px rgba(54, 216, 255, 0.5);
+      }
+      #credit {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 1560px;
+        text-align: center;
+        font-family: var(--mono);
+        font-size: 28px;
+        letter-spacing: 9px;
+        color: rgba(238, 246, 255, 0.7);
+        opacity: 0;
+      }
+
+      /* ── finishing layers ───────────────────────────── */
+      #pulse,
+      #flash,
+      #vignette,
+      #grain,
+      #fade {
+        position: absolute;
+        inset: 0;
+      }
+      #pulse {
+        background: radial-gradient(ellipse at 50% 55%, rgba(120, 210, 255, 0.35), transparent 70%);
+        mix-blend-mode: screen;
+        opacity: 0;
+      }
+      #flash {
+        background: #fff;
+        opacity: 0;
+      }
+      #vignette {
+        background: radial-gradient(ellipse at 50% 48%, transparent 52%, rgba(0, 0, 0, 0.78) 100%);
+      }
+      #grain {
+        inset: -200px;
+        opacity: 0.11;
+        mix-blend-mode: overlay;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.4 0'/></filter><rect width='300' height='300' filter='url(%23n)'/></svg>");
+      }
+      #fade {
+        background: #000;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-width="1080"
+      data-height="1920"
+      data-duration="25"
+    >
+      <div id="stage">
+        <div
+          id="city"
+          class="scene"
+          data-composition-id="city"
+          data-composition-src="compositions/city.html"
+          data-start="0"
+          data-duration="6.05"
+          data-track-index="1"
+          data-width="1080"
+          data-height="1920"
+        ></div>
+
+        <video id="v-reveal" class="shot" src="renders/reveal.mp4" data-start="6" data-duration="3" data-track-index="2" muted playsinline></video>
+        <video id="v-tank" class="shot" src="renders/tank.mp4" data-start="9" data-duration="2.5" data-track-index="2" muted playsinline></video>
+        <video id="v-smg" class="shot" src="renders/smg.mp4" data-start="11.5" data-duration="3.5" data-track-index="2" muted playsinline></video>
+        <video id="v-launch" class="shot" src="renders/launch.mp4" data-start="15" data-duration="2.5" data-track-index="2" muted playsinline></video>
+        <video id="v-profile" class="shot" src="renders/profile.mp4" data-start="17.5" data-duration="3" data-track-index="2" muted playsinline></video>
+        <video id="v-hero" class="shot" src="renders/hero.mp4" data-start="20.5" data-duration="4.5" data-track-index="2" muted playsinline></video>
+
+        <div id="streaks" class="clip scene" data-start="15" data-duration="2.5" data-track-index="3"></div>
+
+        <div id="hud-ignite" class="hud">
+          <div class="k">01 / IGNITION</div>
+          <div class="bar"></div>
+        </div>
+        <div id="hud-tank" class="hud">
+          <div class="k">02 / STOP &amp; START</div>
+          <div class="t">The engine rests at idle.</div>
+          <div class="s">Restarts the instant you twist.</div>
+          <div class="bar"></div>
+        </div>
+        <div id="hud-smg" class="hud">
+          <div class="k">03 / SMG</div>
+          <div class="t">Smart Motor Generator</div>
+          <div class="s">Electric assist on take-off.</div>
+          <div class="bar"></div>
+        </div>
+        <div id="hud-profile" class="hud">
+          <div class="k">04 / FZS FI HYBRID</div>
+          <div class="bar"></div>
+        </div>
+
+        <div id="go" class="clip scene" data-start="15" data-duration="1.1" data-track-index="4">
+          <span id="go-word">GO.</span>
+        </div>
+
+        <div id="captions"></div>
+
+        <div
+          id="endcard"
+          class="scene"
+          data-composition-id="endcard"
+          data-composition-src="compositions/endcard.html"
+          data-start="20.7"
+          data-duration="4.3"
+          data-track-index="5"
+          data-width="1080"
+          data-height="1920"
+        ></div>
+        <div id="credit">A CONCEPT FILM<span id="credit-by"></span></div>
+      </div>
+
+      <div id="pulse" data-layout-allow-occlusion></div>
+      <div id="flash" data-layout-allow-occlusion></div>
+      <div id="vignette" data-layout-allow-occlusion></div>
+      <div id="grain" data-layout-allow-occlusion></div>
+      <div id="fade" data-layout-allow-occlusion></div>
+
+      <audio id="mix" src="audio/mix.wav" data-start="0" data-duration="25" data-track-index="0"></audio>
+    </div>
+
+    <script>
+      (() => {
+        const FILM = window.FILM;
+        // Seeded PRNG: identical streak layout in preview and every render.
+        let seed = 31102026;
+        const rand = () => {
+          seed |= 0;
+          seed = (seed + 0x6d2b79f5) | 0;
+          let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+          t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+        const tl = gsap.timeline({ paused: true });
+
+        // ── flashes on cuts ───────────────────────────────────
+        const flash = (at, peak, dur) => tl.fromTo("#flash", { opacity: peak }, { opacity: 0, duration: dur, ease: "power2.out", immediateRender: false }, at);
+        flash(6.0, 1, 0.22);
+        flash(6.7, 0.32, 0.25); // DRL ignites
+        flash(9.0, 0.45, 0.16);
+        flash(11.5, 0.45, 0.16);
+        flash(15.0, 1, 0.32);
+        flash(17.5, 0.4, 0.2);
+        flash(20.5, 0.85, 0.45);
+
+        // ── slow push on every shot (keeps CG alive) ──────────
+        for (const [id, at, dur] of [["#v-reveal", 6, 3], ["#v-tank", 9, 2.5], ["#v-smg", 11.5, 3.5], ["#v-launch", 15, 2.5], ["#v-profile", 17.5, 3], ["#v-hero", 20.5, 4.5]]) {
+          tl.fromTo(id, { scale: 1.0 }, { scale: 1.06, duration: dur, ease: "none" }, at);
+        }
+
+        // ── HUD chapter labels ────────────────────────────────
+        const hud = (id, at, until) => {
+          tl.fromTo(id, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power3.out" }, at);
+          tl.fromTo(`${id} .bar`, { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power3.out" }, at + 0.1);
+          tl.to(id, { opacity: 0, x: 20, duration: 0.25, ease: "power2.in" }, until - 0.28);
+        };
+        hud("#hud-ignite", 6.75, 9.0);
+        hud("#hud-tank", 9.1, 11.5);
+        hud("#hud-smg", 11.6, 15.0);
+        hud("#hud-profile", 17.6, 20.5);
+
+        // ── word-synced captions (Kokoro script, Parakeet timings, Whisper-checked) ──
+        const cap = document.getElementById("captions");
+        FILM.phrases.forEach((p, i) => {
+          const el = document.createElement("div");
+          el.className = `phrase ${p.zone}`;
+          el.id = `cap-${p.id}`;
+          p.words.forEach((w) => {
+            const s = document.createElement("span");
+            s.className = w.e ? "w e" : "w";
+            s.textContent = w.w;
+            el.appendChild(s);
+          });
+          cap.appendChild(el);
+          const spans = el.querySelectorAll(".w");
+          const next = FILM.phrases[i + 1] && FILM.phrases[i + 1].zone === p.zone ? FILM.phrases[i + 1].words[0].t : Infinity;
+          // Act 1 text is wiped by the silence beat at 5.0
+          const out = Math.min(p.end + 0.18, next, p.zone === "mid" ? 5.0 : Infinity) - 0.12;
+          tl.set(el, { opacity: 1 }, p.words[0].t - 0.05);
+          p.words.forEach((w, k) => {
+            tl.fromTo(
+              spans[k],
+              { opacity: 0, y: 26, filter: "blur(10px)", scale: w.e ? 1.12 : 1 },
+              { opacity: 1, y: 0, filter: "blur(0px)", scale: 1, duration: 0.3, ease: "power3.out" },
+              w.t - 0.04,
+            );
+          });
+          tl.to(el, { opacity: 0, y: -14, filter: "blur(8px)", duration: 0.2, ease: "power2.in" }, out);
+        });
+
+        // ── launch: GO. slam, light streaks, shake on Demucs drum hits ──
+        tl.fromTo("#go-word", { scale: 1.6, opacity: 0, filter: "blur(18px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.16, ease: "power4.out" }, 15.0);
+        tl.to("#go-word", { scale: 0.92, opacity: 0, filter: "blur(10px)", duration: 0.35, ease: "power2.in" }, 15.7);
+        const streaks = document.getElementById("streaks");
+        for (let i = 0; i < 26; i++) {
+          const s = document.createElement("div");
+          s.className = "streak";
+          const w = 260 + rand() * 520;
+          Object.assign(s.style, { width: `${w}px`, top: `${120 + rand() * 1700}px`, left: "0px", opacity: `${0.35 + rand() * 0.6}` });
+          streaks.appendChild(s);
+          tl.fromTo(s, { x: 1200 }, { x: -w - 100, duration: 0.22 + rand() * 0.25, ease: "none" }, 15.0 + rand() * 2.2);
+        }
+        const shake = (at, amp) => {
+          [
+            [1, -0.6],
+            [-0.8, 0.9],
+            [0.5, -0.4],
+            [-0.25, 0.2],
+            [0, 0],
+          ].forEach(([x, y], j) => tl.to("#stage", { x: x * amp, y: y * amp, duration: 0.03, ease: "none" }, at + j * 0.03));
+        };
+        shake(6.0, 16);
+        shake(20.5, 10);
+        for (const h of FILM.hits) {
+          if (h.t >= 15.0 && h.t < 17.5) shake(h.t, 6 + 12 * h.s);
+          if (h.t >= 6.2 && h.t < 15.0 && h.s >= 0.55) {
+            tl.fromTo("#pulse", { opacity: 0.55 * h.s }, { opacity: 0, duration: 0.22, ease: "power2.out", immediateRender: false }, h.t);
+          }
+        }
+
+        // ── credit + fade out ─────────────────────────────────
+        const { creator } = window.__hyperframes ? window.__hyperframes.getVariables() : { creator: "" };
+        if (creator && creator.trim()) document.getElementById("credit-by").textContent = ` · BY ${creator.trim().toUpperCase()}`;
+        tl.fromTo("#credit", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 22.3);
+        tl.fromTo("#fade", { opacity: 0 }, { opacity: 1, duration: 0.8, ease: "power1.in" }, 24.2);
+
+        // ── film grain: re-seeded every frame ──────────────────
+        tl.fromTo("#grain", { backgroundPosition: "0px 0px" }, { backgroundPosition: "2310px 1730px", duration: 25, ease: "steps(750)" }, 0);
+
+        window.__timelines["main"] = tl;
+      })();
+    </script>
+  </body>
+</html>

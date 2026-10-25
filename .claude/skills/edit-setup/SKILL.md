@@ -28,6 +28,24 @@ bash .claude/skills/edit-setup/scripts/doctor.sh               # must print 5/5 
 
 Don't start an edit until `doctor.sh` passes for every tool the edit needs.
 
+**Locked-down network** (HuggingFace / `dl.fbaipublicfiles.com` / `openaipublic` blocked, GitHub + npm + PyPI open — e.g. cloud sandboxes): run `scripts/offline_models.sh`. It pulls ONNX builds of every model from GitHub releases and npm instead — Whisper small.en + Parakeet TDT (sherpa-onnx), Kokoro v1.0 TTS, DCLAP (CLAP audio tower + LAION text tower, with the roberta-base tokenizer extracted from spaCy's `en_core_web_trf` wheel), and Demucs htdemucs (npm `demucs`). The ONNX Whisper export has no cross-attention outputs, so use it as the **transcript QA gate** and take **word timestamps from Parakeet**.
+
+## 0b. Generative mode — no footage, make the film
+
+When the brief is a content-calendar idea rather than raw footage, every tool still has a real job. Worked example: `films/hybrid-silence/` (a 25 s 9:16 concept film):
+
+| Tool        | Job                                                                                                                                                                                  | File              |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- |
+| Kokoro TTS  | voiceover; pick the voice by measured median F0 (`librosa.pyin`) — deepest reads as "trailer"                                                                                        | `audio/voice.py`  |
+| Whisper     | transcribe every VO line; **fail the run** if it doesn't match the script (it caught a swallowed "A")                                                                                | `audio/voice.py`  |
+| Parakeet    | word timestamps → kinetic captions, and cuts placed on words ("It sleeps…", "go.")                                                                                                   | `audio/vo.json`   |
+| CLAP        | synthesize 3–4 variants per SFX slot, rank against a text prompt, keep the best; label the finished mix as QA. **Tile** short clips to CLAP's 10 s window — zero padding swamps them | `audio/sound.py`  |
+| Demucs      | split the score: duck only melodic stems under the voice, keep drums punchy; drum-stem onsets → visual hit grid (flashes, shake)                                                     | `audio/hits.json` |
+| Blender     | procedural hero object + six shots (EEVEE via Mesa on headless Linux)                                                                                                                | `blender/bike.py` |
+| HyperFrames | sub-compositions for scenes, one main timeline, `check` with 0 warnings                                                                                                              | `index.html`      |
+
+Write the timeline (VO start times, cut points) **once**, then derive audio, captions and shots from it, so a cut always lands on the word that motivates it.
+
 ## 1. Brief (ask once, then go)
 
 Confirm in **one** message, defaulting anything the user doesn't care about:
@@ -118,6 +136,7 @@ Runs `hyperframes lint` → `hyperframes check` → `render` → loudness normal
 - **Captions drift late** → source was VFR; use `source.mp4` from the work dir.
 - **Transcript mishears over music** → you transcribed the mix, not `vocals.wav`.
 - **CLAP labels everything "music"** → narrow the label list to what's plausible in this footage, raise `--min-score`.
-- **Blender aborts on `libEGL` / "Build without OpenImageDenoiser"** → headless box without GPU; `--engine auto` (default) already picks Cycles on CPU there and only denoises when the build supports it.
+- **Blender aborts on `libEGL` / "Build without OpenImageDenoiser"** → headless box without GPU; `--engine auto` (default) already picks Cycles on CPU there and only denoises when the build supports it. Faster: `apt-get install libegl1 libgl1-mesa-dri libegl-mesa0` and EEVEE runs on software GL (surfaceless EGL) at ~15 s/frame for 720×1280 with bloom, SSR and volumetrics.
+- **Kokoro "No lexicon available"** → current sherpa-onnx needs the v1.0 pack (`kokoro-multi-lang-v1_0`) with `lexicon=lexicon-us-en.txt,lexicon-gb-en.txt` and `dict_dir`.
 - **Blender render black** → object outside camera; the script normalizes to a 2-unit box, so check imported model scale/units.
 - **Model downloads fail** → HuggingFace / `dl.fbaipublicfiles.com` blocked on this network; run `install.sh --prefetch` where they're reachable.
