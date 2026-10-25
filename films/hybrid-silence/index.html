@@ -373,8 +373,9 @@
           cap.appendChild(el);
           const spans = el.querySelectorAll(".w");
           const next = FILM.phrases[i + 1] && FILM.phrases[i + 1].zone === p.zone ? FILM.phrases[i + 1].words[0].t : Infinity;
-          // Act 1 text is wiped by the silence beat at 5.0
-          const out = Math.min(p.end + 0.18, next, p.zone === "mid" ? 5.0 : Infinity) - 0.12;
+          // Hard cuts own the frame: Act 1 text is wiped by the 5.0 silence, the launch line clears before "GO."
+          const hardStop = p.zone === "mid" ? 5.0 : p.words[0].t < 15.0 ? 14.92 : Infinity;
+          const out = Math.min(p.end + 0.18, next, hardStop) - 0.12;
           tl.set(el, { opacity: 1 }, p.words[0].t - 0.05);
           p.words.forEach((w, k) => {
             tl.fromTo(
